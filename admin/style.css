@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.bgcolor {
+    background-color: black;
+    opacity: 0.8;
+}
+.font-color a{
+    color: white !important;
+    margin-right: 45%;
+}
+.storeName a:hover{
+    border-bottom: 2px solid #f36767;
+    color: #f36767 !important;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ... (other styles) ... */
+
+
+/* Style for the user list container */
+#userList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Style for the user item card */
+.user-item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    transition: transform 0.2s;
+}
+
+.user-item:hover {
+    transform: translateY(-5px);
+}
+
+/* Style for the activate and deactivate buttons */
+.activate-btn,
+.deactivate-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.activate-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.deactivate-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.activate-btn:disabled,
+.deactivate-btn:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+}
