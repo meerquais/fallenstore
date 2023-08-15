@@ -1,38 +1,14 @@
 import { collection, db, doc, getDocs, updateDoc } from '../firebase.js';
 
-const querySnapshot = await getDocs(collection(db, "users"));
-querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-  console.log(doc.id, " => ", doc.data());
-});
-
-const userData = JSON.parse(localStorage.getItem("user"));
-console.log(userData);
-
-window.addEventListener("load", function () {
-    if (localStorage.getItem("user") === null) {
-        window.location.replace("/");
-        return;
-    } else {
-        if (userData.accountType !== "admin") {
-            history.back();
-            return;
-        }
-    }
-});
-
 const userListContainer = document.getElementById('userList');
 const logoutBtn = document.getElementById('logoutBtn');
+
 logoutBtn.addEventListener('click', logout);
 
-
 function logout() {
-    // Perform any necessary logout actions, such as clearing local storage
     localStorage.removeItem("user");
-    // Redirect the user to the login page
     window.location.replace("/");
 }
-
 
 async function fetchAndDisplayUsers() {
     try {
@@ -42,7 +18,7 @@ async function fetchAndDisplayUsers() {
         usersSnapshot.forEach((userDoc) => {
             const userData = userDoc.data();
             const userItem = document.createElement('div');
-            userItem.className = 'user-item col-md-3'; // Add col class and adjust column size for responsiveness
+            userItem.className = 'user-item col-md-3';
 
             userItem.innerHTML = `
                 <div class="card">
@@ -55,11 +31,19 @@ async function fetchAndDisplayUsers() {
                     </div>
                 </div>
             `;
-
+            console.log(userData)
             userListContainer.appendChild(userItem);
         });
 
-        // ...
+        // Attach event listeners after user data is displayed
+        const activateBtns = document.querySelectorAll('.activate-btn');
+        const deactivateBtns = document.querySelectorAll('.deactivate-btn');
+        activateBtns.forEach((btn) => {
+            btn.addEventListener('click', activateAccount);
+        });
+        deactivateBtns.forEach((btn) => {
+            btn.addEventListener('click', deactivateAccount);
+        });
 
     } catch (error) {
         console.error('Error fetching users:', error);
@@ -69,7 +53,6 @@ async function fetchAndDisplayUsers() {
 async function activateAccount(event) {
     try {
         const uid = event.target.getAttribute('data-uid');
-        console.log('Activating account:', uid);
         const userRef = doc(db, 'users', uid);
         await updateDoc(userRef, { accVerified: true });
         fetchAndDisplayUsers();
@@ -81,9 +64,9 @@ async function activateAccount(event) {
 async function deactivateAccount(event) {
     try {
         const uid = event.target.getAttribute('data-uid');
-        console.log('Deactivating account:', uid);
         const userRef = doc(db, 'users', uid);
-        await updateDoc(userRef, { accVerified: false });
+        const data = { accVerified: false };
+        await updateDoc(userRef, data);
         fetchAndDisplayUsers();
     } catch (error) {
         console.error('Error deactivating account:', error);
